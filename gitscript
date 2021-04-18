@@ -1,0 +1,70 @@
+#!/bin/bash
+
+branch() {
+	if [[ $1 == "add" ]]
+	then
+		add_process
+
+	elif [[ $1 == "commit" ]]
+	then
+		commit_process
+
+	elif [[ $1 == "pull" ]]
+	then 
+		pull_process
+
+	elif [[ $1 == "pull" ]]
+	then
+		push_process
+
+	elif [[ $1 == "status" ]]
+	then
+		status_process
+	fi
+}
+
+add_process() {
+	echo "ToDo"
+}
+
+commit_process() {
+	opt=""
+	msg=$(echo $opt | dmenu -i -p "Write commit message:")
+	git commit $msg
+	
+	opt="add\ncommit\npush\nstatus\nexit"
+	cm=$(echo -e $opt | dmenu -i -p "git ")
+	branch $cm
+}
+
+pull_process() {
+	git pull
+
+	opt="add\ncommit\npush\nstatus\nexit"
+	cm=$(echo -e $opt | dmenu -i -p "git ")
+	branch $cm
+}
+
+push_process() {
+	git push
+
+	opt="add\ncommit\npull\nstatus\nexit"
+	cm=$(echo -e $opt | dmenu -i -p "git ")
+	branch $cm
+}
+
+status_process() {
+	git status
+
+	opt="add\ncommit\npull\npush\nstatus\nexit"
+	cm=$(echo -e $opt | dmenu -i -p "git ")
+	branch $cm
+}
+
+cd $(pwd)
+
+opt="add\ncommit\npull\npush\nstatus"
+
+cm=$(echo -e $opt | dmenu -i -p "git ")
+
+branch $cm
