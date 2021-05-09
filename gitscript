@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Pass directory
+msg=$(echo "" | dmenu -i -p "Git direcrory (/home/..):")
+terminal -cd "$msg"
+
+### TODO ###
+# Safe directory
+
 branch() {
 	if [[ $1 == "add" ]]
 	then
