@@ -1,0 +1,55 @@
+#!/bin/bash
+
+read -p  "Choose a setup file location (Default /home/$USER/dmenuXgit/): " LOC
+echo
+
+GIT_PATH=""
+CONF_PATH="/home/$USER/dmenuXgit"
+
+# Read single project path input 
+# TODO: Let the user define an alias for each path given
+#       to implement an extra menu to switch between them
+read -p "Absolute path to your local GitHub project: " GIT_PATH
+
+# Force path input
+# TODO: Assure that it is a git repo (e.g. check for an .git)
+while [[ "$GIT_PATH" == "" ]]
+do
+
+	echo -e "Error: No GitHub project path defined!\n"
+	read -p "Absolute path to your local GitHub project: " GIT_PATH
+
+done
+
+# Default location
+if [[ "$LOC" == "" ]] 
+then
+	if [[ -d "$CONF_PATH" ]]
+	then 
+		echo "Directory already exists"
+	else
+		mkdir "$CONF_PATH" 
+	fi
+
+# User defined location
+else 			
+	CONF_PATH="$LOC"
+fi
+
+# Check whether a config file already exists
+if [[ -f "$CONF_PATH/dmenuXgit.conf" ]]
+then
+	echo
+	read -p  "$CONF_PATH/dmenuXgit.conf already exists. Are you sure you want to overwrite it? [y/n] " OVERWRITE
+
+	if [ "$OVERWRITE" == "y" ] || [ "$OVERWRITE" == "yes" ] || [ "$OVERWRITE" == "Y" ] || [ "$OVERWRITE" == "YES" ] || [ "$OVERWRITE" == "Yes" ]
+	then 
+		touch "$CONF_PATH"/dmenuXgit.conf
+		echo  "$GIT_PATH" > "$CONF_PATH"/dmenuXgit.conf
+	fi
+else	
+	touch "$CONF_PATH"/dmenuXgit.conf
+	echo  "$GIT_PATH" > "$CONF_PATH"/dmenuXgit.conf
+fi
+
+echo "Setup successful!"
