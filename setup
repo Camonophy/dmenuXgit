@@ -1,7 +1,9 @@
 #!/bin/bash
 
-read -p  "Choose a setup file location (Default /home/$USER/dmenuXgit/): " LOC
-echo
+#sudo cp gitscript /bin/gitscript
+#sudo chmod 777 /bin/gitscript
+
+echo "Create config file at /home/$USER/dmenuXgit/" && echo
 
 GIT_PATH=""
 CONF_PATH="/home/$USER/dmenuXgit"
@@ -21,25 +23,17 @@ do
 
 done
 
-# Default location
-if [[ "$LOC" == "" ]] 
-then
-	if [[ -d "$CONF_PATH" ]]
-	then 
-		echo "Directory already exists"
-	else
-		mkdir "$CONF_PATH" 
-	fi
-
-# User defined location
-else 			
-	CONF_PATH="$LOC"
+# Create directory
+if [[ -d "$CONF_PATH" ]]
+then 
+	echo "Directory already exists"
+else
+	mkdir "$CONF_PATH" 
 fi
 
 # Check whether a config file already exists
 if [[ -f "$CONF_PATH/dmenuXgit.conf" ]]
 then
-	echo
 	read -p  "$CONF_PATH/dmenuXgit.conf already exists. Are you sure you want to overwrite it? [y/n] " OVERWRITE
 
 	if [ "$OVERWRITE" == "y" ] || [ "$OVERWRITE" == "yes" ] || [ "$OVERWRITE" == "Y" ] || [ "$OVERWRITE" == "YES" ] || [ "$OVERWRITE" == "Yes" ]
