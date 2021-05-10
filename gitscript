@@ -1,11 +1,15 @@
 #!/bin/bash
 
-# Pass directory
-msg=$(echo "" | dmenu -i -p "Git direcrory (/home/..):")
-terminal -cd "$msg"
+GIT_PATH=$(cat /home/"$USER"/dmenuXgit/dmenuXgit.conf)
 
-### TODO ###
-# Safe directory
+echo "$GIT_PATH"
+
+if [[ "$GIT_PATH" == "" ]]
+then
+	# Pass directory
+	ERR=$(echo "" | dmenu -i -p "No GitHub path found. Please run the setup file.")
+	exit	
+fi
 
 branch() {
 	if [[ $1 == "add" ]]
@@ -31,47 +35,48 @@ branch() {
 }
 
 add_process() {
-	echo "ToDo"
+	echo "TODO"
 }
 
 commit_process() {
-	opt=""
-	msg=$(echo $opt | dmenu -i -p "Write commit message:")
-	git commit $msg
+	OPT=""
+	MSG=$(echo $OPT | dmenu -i -p "Write commit message:")
+	git commit $MSG
 	
-	opt="add\ncommit\npush\nstatus\nexit"
-	cm=$(echo -e $opt | dmenu -i -p "git ")
-	branch $cm
+	OPT="add\ncommit\npush\nstatus\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
 pull_process() {
 	git pull
 
-	opt="add\ncommit\npush\nstatus\nexit"
-	cm=$(echo -e $opt | dmenu -i -p "git ")
-	branch $cm
+	OPT="add\ncommit\npush\nstatus\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
 push_process() {
 	git push
 
-	opt="add\ncommit\npull\nstatus\nexit"
-	cm=$(echo -e $opt | dmenu -i -p "git ")
-	branch $cm
+	OPT="add\ncommit\npull\nstatus\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
 status_process() {
 	git status
 
-	opt="add\ncommit\npull\npush\nstatus\nexit"
-	cm=$(echo -e $opt | dmenu -i -p "git ")
-	branch $cm
+	OPT="add\ncommit\npull\npush\nstatus\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
-cd $(pwd)
 
-opt="add\ncommit\npull\npush\nstatus"
+terminal -cd "$GIT_PATH" 
 
-cm=$(echo -e $opt | dmenu -i -p "git ")
+OPT="add\ncommit\npull\npush\nstatus"
 
-branch $cm
+CM=$(echo -e $OPT | dmenu -i -p "git ")
+
+branch $CM
