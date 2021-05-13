@@ -1,12 +1,14 @@
 #!/bin/bash
 
-#sudo cp gitscript /bin/gitscript
-#sudo chmod 777 /bin/gitscript
+sudo cp script /home/$USER/dmenuXgit/
+sudo cp easydg /bin/easydg
+sudo chmod 777 /home/$USER/dmenuXgit/script
+sudo chmod 777 /bin/easydg
 
 echo "Create config file at /home/$USER/dmenuXgit/" && echo
 
 GIT_PATH=""
-CONF_PATH="/home/$USER/dmenuXgit"
+CONF_PATH="/home/$USER/dmenuXgit/"
 
 # Read single project path input 
 # TODO: Let the user define an alias for each path given
