@@ -1,0 +1,14 @@
+#!/bin/bash
+
+GIT_PATH=$(cat /home/"$USER"/dmenuXgit/dmenuXgit.conf)
+
+echo "$GIT_PATH"
+
+if [[ "$GIT_PATH" == "" ]]
+then
+	# Pass directory
+	ERR=$(echo "" | dmenu -i -p "No GitHub path found. Please run the setup file.")
+	exit	
+fi
+
+terminal -cd "$GIT_PATH" -e /home/"$USER"/dmenuXgit/script
