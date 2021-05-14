@@ -22,6 +22,19 @@ branch() {
 	elif [[ $1 == "status" ]]
 	then
 		status_process
+
+	#elif [[ $1 == "restore" ]]
+	#then
+	#	restore_process
+
+	#elif [[ $1 == "diff" ]]
+	#then
+	#	diff_process
+
+	#elif [[ $1 == "merge" ]]
+	#then
+		#merge_process	
+
 	fi
 }
 
