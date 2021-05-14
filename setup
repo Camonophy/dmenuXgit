@@ -12,11 +12,11 @@ CONF_PATH="/home/$USER/dmenuXgit/"
 
 # Read single project path input 
 # TODO: Let the user define an alias for each path given
-#       to implement an extra menu to switch between them
+#       and implement an extra menu to switch between them
 read -p "Absolute path to your local GitHub project: " GIT_PATH
 
 # Force path input
-# TODO: Assure that it is a git repo (e.g. check for an .git)
+# TODO: Make sure that it is a git repo (e.g. check for an .git)
 while [[ "$GIT_PATH" == "" ]]
 do
 
