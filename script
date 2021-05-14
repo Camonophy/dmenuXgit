@@ -1,8 +1,10 @@
 #!/bin/bash
 
 branch() {
+	echo
 	if [[ $1 == "add" ]]
 	then
+	
 		add_process
 
 	elif [[ $1 == "commit" ]]
@@ -24,18 +26,65 @@ branch() {
 }
 
 add_process() {
-	#git status > untracked_files.txt
 	GREP=$(git status | grep 'nothing to commit, working tree clean')
 	if [[ "$GREP" != "" ]]
 	then
 		echo "Nothing to commit"
 	else
-		echo "Something to commit"
+		git status > untracked_files.txt
+		
+		# Line numbers to mark ranges in the ouput
+		LINE_NUM=$(wc -l untracked_files.txt | cut -d ' ' -f 1)
+
+		MODIFIED_BEGIN=$(echo $(cat untracked_files.txt \
+			       | grep -n 'Changes not staged for commit:' \
+			       | cut -d ':' -f 1) + 3 \
+			       | bc )
+		MODIFIED_END=$(echo $(cat untracked_files.txt \
+		       	     | grep -n 'Untracked files:' \
+			     | cut -d ':' -f 1) \
+			     | bc )
+		
+		NEW_FILE_BEGIN=$(echo $MODIFIED_END + 2 | bc )
+		NEW_FILE_END=$(echo $LINE_NUM - 2 | bc)
+		
+		# Get the actual files from the output
+		MODIFIED_LIST=$(head -$MODIFIED_END untracked_files.txt \
+			      | tail +$MODIFIED_BEGIN \
+			      | sed 's/ //g' \
+			      | cut -d ':' -f 2 )
+		rm untracked_files.txt
+		
+		NEW_FILE_LIST=$(git status | head -$NEW_FILE_END \
+			      | tail +$NEW_FILE_BEGIN \
+			      | tr -d '\011' \
+			      | cut -d ':' -f 2 )
+	
+		# User input
+		if [[ "$MODIFIED_LIST" == "" && "$NEW_FILE_LIST" == "" ]]
+		then
+			FILE=$(echo -e "" | dmenu -i -p "No file to add!" )
+		
+		elif [[ "$NEW_FILE_LIST" == "" || "$MODIFIED_LIST" == "" ]]
+		then
+			if [[ "$NEW_FILE_LIST" == "" ]]
+			then
+				FILE_LIST="$MODIFIED_LIST\\nALL"
+				git_add_command "$FILE_LIST"
+			else
+				FILE_LIST="$NEW_FILE_LIST\\nALL"
+				git_add_command "$FILE_LIST"
+			fi
+		
+		else
+			FILE_LIST="$MODIFIED_LIST\\n$NEW_FILE_LIST\\nALL"
+			git_add_command "$FILE_LIST"
+		fi
 	fi
-
-	echo "$GREP"
-
-	rm untracked_files.txt
+	
+	OPT="add\npull\ncommit\npush\nstatus\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
 commit_process() {
@@ -70,6 +119,17 @@ status_process() {
 	OPT="add\ncommit\npull\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
+}
+
+git_add_command() {
+	FILE=$(echo -e "$1" | dmenu -i -p "git add" )
+	
+	if [[ "$FILE" == "ALL" ]]
+	then
+		git add .
+	else
+		git add "$FILE"
+	fi
 }
 
 OPT="add\ncommit\npull\npush\nstatus"
