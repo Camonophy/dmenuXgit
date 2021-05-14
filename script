@@ -24,7 +24,16 @@ branch() {
 }
 
 add_process() {
-	echo "TODO"
+	git status > untracked_files.txt
+	GREP=$(grep 'nothing to commit, working tree clean' untracked_files.txt)
+	if [[ "$GREP" != "" ]]
+	then
+		echo "Nothing to commit"
+	else
+		echo "Something to commit"
+	fi
+
+	rm untracked_files.txt
 }
 
 commit_process() {
