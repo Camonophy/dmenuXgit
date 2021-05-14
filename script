@@ -30,7 +30,7 @@ add_process() {
 commit_process() {
 	OPT=""
 	MSG=$(echo $OPT | dmenu -i -p "Write commit message:")
-	git commit $MSG
+	git commit -m "$MSG"
 	
 	OPT="add\ncommit\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
