@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo rm /bin/easydg
-rm -rf /home/"$USER"/dmenuXgit
-rm ./setup ./easydg ./uninstall ./script

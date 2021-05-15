@@ -1,9 +1,9 @@
 #!/bin/bash
 
-sudo cp script /home/$USER/dmenuXgit/
-sudo cp easydg /bin/easydg
-sudo chmod 777 /home/$USER/dmenuXgit/script
-sudo chmod 777 /bin/easydg
+sudo cp script.sh /home/$USER/dmenuXgit/
+sudo cp dmenuXgit /bin/dmenuXgit
+sudo chmod 777 /home/$USER/dmenuXgit/script.sh
+sudo chmod 777 /bin/dmenuXgit
 
 echo "Create config file at /home/$USER/dmenuXgit/" && echo
 
