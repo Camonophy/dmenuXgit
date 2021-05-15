@@ -1,7 +1,7 @@
 # dmenuXgit
 ## Features
 
-- Manage your Git projects from anywhere from your desktop
+- Manage your Git projects from anywhere on your desktop
 - No command memorizing required 
 - Easy accessible for new Git users
 - Accelerates simple Git workflows due to the simplicity of dmenu
