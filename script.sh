@@ -4,7 +4,6 @@ branch() {
 	echo
 	if [[ $1 == "add" ]]
 	then
-	
 		add_process
 
 	elif [[ $1 == "commit" ]]
@@ -23,6 +22,10 @@ branch() {
 	then
 		status_process
 
+	elif [[ $1 == "clone" ]]
+	then
+		clone_process
+	
 	#elif [[ $1 == "restore" ]]
 	#then
 	#	restore_process
@@ -95,7 +98,7 @@ add_process() {
 		fi
 	fi
 	
-	OPT="add\npull\ncommit\npush\nstatus\nexit"
+	OPT="add\npull\ncommit\npush\nstatus\nclone\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -105,7 +108,7 @@ commit_process() {
 	MSG=$(echo $OPT | dmenu -i -p "Write commit message:")
 	git commit -m "$MSG"
 	
-	OPT="add\ncommit\npush\nstatus\nexit"
+	OPT="add\ncommit\npush\nstatus\nclone\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -113,7 +116,7 @@ commit_process() {
 pull_process() {
 	git pull
 
-	OPT="add\ncommit\npush\nstatus\nexit"
+	OPT="add\ncommit\npush\nstatus\nclone\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -121,7 +124,7 @@ pull_process() {
 push_process() {
 	git push
 
-	OPT="add\ncommit\npull\nstatus\nexit"
+	OPT="add\ncommit\npull\nstatus\nclone\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -129,13 +132,13 @@ push_process() {
 status_process() {
 	git status
 
-	OPT="add\ncommit\npull\npush\nstatus\nexit"
+	OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
 
 git_add_command() {
-	FILE=$(echo -e "$1" | dmenu -i -p "git add" )
+	FILE=$(echo -e "$1" | dmenu -i -p "git add " )
 	
 	if [[ "$FILE" == "ALL" ]]
 	then
@@ -145,7 +148,32 @@ git_add_command() {
 	fi
 }
 
-OPT="add\ncommit\npull\npush\nstatus"
+clone_process() {
+	DIR=""
+	DIR=$(echo $DIR | dmenu -i -p "Destination path ")
+
+	OPT="HTTPS\nSSH"
+	CH=$(echo -e $OPT | dmenu -i -p "Clone options ")
+	
+	OWNER=""
+	OWNER=$(echo $OWNER | dmenu -i -p "Name of the repository owner ")
+
+	REPO=""
+	REPO=$(echo $REPO | dmenu -i -p "Name of the repository project ")
+
+	if [[ "$CH" == "HTTPS" ]]
+	then
+		git clone "https://github.com/$OWNER/$REPO.git" $DIR
+	else
+		git clone "git@github.com:$OWNER/$REPO.git" $DIR
+	fi
+
+	OPT="add\ncommit\npull\nstatus\nclone\nexit"
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
+}
+
+OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
 
 CM=$(echo -e $OPT | dmenu -i -p "git ")
 
