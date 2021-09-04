@@ -4,7 +4,6 @@ branch() {
 	echo
 	if [[ $1 == "add" ]]
 	then
-	
 		add_process
 
 	elif [[ $1 == "commit" ]]
@@ -23,9 +22,13 @@ branch() {
 	then
 		status_process
 
-	#elif [[ $1 == "restore" ]]
-	#then
-	#	restore_process
+	elif [[ $1 == "clone" ]]
+	then
+		clone_process
+	
+	elif [[ $1 == "restore" ]]
+	then
+		restore_process
 
 	#elif [[ $1 == "diff" ]]
 	#then
@@ -44,16 +47,16 @@ add_process() {
 	then
 		echo "Nothing to commit"
 	else
-		git status > untracked_files.txt
+		git status > /home/"$USER"/dmenuXgit/untracked_files.txt
 		
 		# Line numbers to mark ranges in the ouput
-		LINE_NUM=$(wc -l untracked_files.txt | cut -d ' ' -f 1)
+		LINE_NUM=$(wc -l /home/"$USER"/dmenuXgit/untracked_files.txt | cut -d ' ' -f 1)
 
-		MODIFIED_BEGIN=$(echo $(cat untracked_files.txt \
+		MODIFIED_BEGIN=$(echo $(cat /home/"$USER"/dmenuXgit/untracked_files.txt \
 			       | grep -n 'Changes not staged for commit:' \
 			       | cut -d ':' -f 1) + 3 \
 			       | bc )
-		MODIFIED_END=$(echo $(cat untracked_files.txt \
+		MODIFIED_END=$(echo $(cat /home/"$USER"/dmenuXgit/untracked_files.txt \
 		       	     | grep -n 'Untracked files:' \
 			     | cut -d ':' -f 1) \
 			     | bc )
@@ -62,16 +65,17 @@ add_process() {
 		NEW_FILE_END=$(echo $LINE_NUM - 2 | bc)
 		
 		# Get the actual files from the output
-		MODIFIED_LIST=$(head -$MODIFIED_END untracked_files.txt \
+		MODIFIED_LIST=$(head -$MODIFIED_END /home/"$USER"/dmenuXgit/untracked_files.txt \
 			      | tail +$MODIFIED_BEGIN \
 			      | sed 's/ //g' \
 			      | cut -d ':' -f 2 )
-		rm untracked_files.txt
 		
 		NEW_FILE_LIST=$(git status | head -$NEW_FILE_END \
 			      | tail +$NEW_FILE_BEGIN \
 			      | tr -d '\011' \
 			      | cut -d ':' -f 2 )
+
+		rm untracked_files.txt
 	
 		# User input
 		if [[ "$MODIFIED_LIST" == "" && "$NEW_FILE_LIST" == "" ]]
@@ -95,17 +99,15 @@ add_process() {
 		fi
 	fi
 	
-	OPT="add\npull\ncommit\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
 
 commit_process() {
-	OPT=""
-	MSG=$(echo $OPT | dmenu -i -p "Write commit message:")
+	MSG=""
+	MSG=$(echo $MSG | dmenu -i -p "Write commit message:")
 	git commit -m "$MSG"
 	
-	OPT="add\ncommit\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -113,7 +115,6 @@ commit_process() {
 pull_process() {
 	git pull
 
-	OPT="add\ncommit\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -121,7 +122,6 @@ pull_process() {
 push_process() {
 	git push
 
-	OPT="add\ncommit\npull\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -129,13 +129,12 @@ push_process() {
 status_process() {
 	git status
 
-	OPT="add\ncommit\npull\npush\nstatus\nexit"
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
 
 git_add_command() {
-	FILE=$(echo -e "$1" | dmenu -i -p "git add" )
+	FILE=$(echo -e "$1" | dmenu -i -p "git add " )
 	
 	if [[ "$FILE" == "ALL" ]]
 	then
@@ -145,7 +144,35 @@ git_add_command() {
 	fi
 }
 
-OPT="add\ncommit\npull\npush\nstatus"
+clone_process() {
+	DIR=""
+	DIR=$(echo $DIR | dmenu -i -p "Destination path ")
+
+	KEY="HTTPS\nSSH"
+	CH=$(echo -e $KEY | dmenu -i -p "Clone options ")
+	
+	OWNER=""
+	OWNER=$(echo $OWNER | dmenu -i -p "Name of the repository owner ")
+
+	REPO=""
+	REPO=$(echo $REPO | dmenu -i -p "Name of the repository project ")
+
+	if [[ "$CH" == "HTTPS" ]]
+	then
+		git clone "https://github.com/$OWNER/$REPO.git" $DIR
+	else
+		git clone "git@github.com:$OWNER/$REPO.git" $DIR
+	fi
+
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
+}
+
+restore_process() {
+	echo 
+}
+
+OPT="add\nrestore\ncommit\npull\npush\nstatus\nclone\nexit"
 
 CM=$(echo -e $OPT | dmenu -i -p "git ")
 
