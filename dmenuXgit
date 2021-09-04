@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GIT_PATH=$(cat /home/"$USER"/dmenuXgit/dmenuXgit.conf)
+GIT_PATH=$(cat /opt/dmenuXgit/dmenuXgit.conf)
 
 echo "$GIT_PATH"
 
@@ -11,4 +11,4 @@ then
 	exit	
 fi
 
-terminal -cd "$GIT_PATH" -e /home/"$USER"/dmenuXgit/script
+terminal -cd "$GIT_PATH" -e /opt/dmenuXgit/script.sh

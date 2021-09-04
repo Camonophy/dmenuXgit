@@ -1,14 +1,14 @@
 #!/bin/bash
 
-sudo cp script.sh /home/$USER/dmenuXgit/
-sudo cp dmenuXgit /bin/dmenuXgit
-sudo chmod 777 /home/$USER/dmenuXgit/script.sh
-sudo chmod 777 /bin/dmenuXgit
+if [[ $EUID -ne 0 ]]; then
+   echo "Please run this setup with root privileges." 
+   exit 1
+fi
 
-echo "Create config file at /home/$USER/dmenuXgit/" && echo
+echo "Create config file at /opt/dmenuXgit/" && echo
 
 GIT_PATH=""
-CONF_PATH="/home/$USER/dmenuXgit/"
+CONF_PATH="/opt/dmenuXgit/"
 
 # Read single project path input 
 # TODO: Let the user define an alias for each path given
@@ -36,7 +36,7 @@ fi
 # Check whether a config file already exists
 if [[ -f "$CONF_PATH/dmenuXgit.conf" ]]
 then
-	read -p  "$CONF_PATH/dmenuXgit.conf already exists. Are you sure you want to overwrite it? [y/n] " OVERWRITE
+	read -p  "${CONF_PATH}dmenuXgit.conf already exists. Are you sure you want to overwrite it? [y/n] " OVERWRITE
 
 	if [ "$OVERWRITE" == "y" ]   || 
 	   [ "$OVERWRITE" == "yes" ] || 
@@ -52,5 +52,10 @@ else
 	touch "$CONF_PATH"/dmenuXgit.conf
 	echo  "$GIT_PATH" > "$CONF_PATH"/dmenuXgit.conf
 fi
+
+cp script.sh /opt/dmenuXgit/
+cp dmenuXgit /bin/dmenuXgit
+chmod 755 /opt/dmenuXgit/script.sh
+chmod 755 /bin/dmenuXgit
 
 echo "Setup successful!"

@@ -26,9 +26,15 @@ branch() {
 	then
 		clone_process
 	
+<<<<<<< HEAD
 	elif [[ $1 == "restore" ]]
 	then
 		restore_process
+=======
+	#elif [[ $1 == "restore" ]]
+	#then
+	#	restore_process
+>>>>>>> master
 
 	#elif [[ $1 == "diff" ]]
 	#then
@@ -99,6 +105,10 @@ add_process() {
 		fi
 	fi
 	
+<<<<<<< HEAD
+=======
+	OPT="add\npull\ncommit\npush\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -108,6 +118,10 @@ commit_process() {
 	MSG=$(echo $MSG | dmenu -i -p "Write commit message:")
 	git commit -m "$MSG"
 	
+<<<<<<< HEAD
+=======
+	OPT="add\ncommit\npush\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -115,6 +129,10 @@ commit_process() {
 pull_process() {
 	git pull
 
+<<<<<<< HEAD
+=======
+	OPT="add\ncommit\npush\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -122,6 +140,10 @@ pull_process() {
 push_process() {
 	git push
 
+<<<<<<< HEAD
+=======
+	OPT="add\ncommit\npull\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -129,6 +151,10 @@ push_process() {
 status_process() {
 	git status
 
+<<<<<<< HEAD
+=======
+	OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -148,8 +174,13 @@ clone_process() {
 	DIR=""
 	DIR=$(echo $DIR | dmenu -i -p "Destination path ")
 
+<<<<<<< HEAD
 	KEY="HTTPS\nSSH"
 	CH=$(echo -e $KEY | dmenu -i -p "Clone options ")
+=======
+	OPT="HTTPS\nSSH"
+	CH=$(echo -e $OPT | dmenu -i -p "Clone options ")
+>>>>>>> master
 	
 	OWNER=""
 	OWNER=$(echo $OWNER | dmenu -i -p "Name of the repository owner ")
@@ -164,15 +195,23 @@ clone_process() {
 		git clone "git@github.com:$OWNER/$REPO.git" $DIR
 	fi
 
+<<<<<<< HEAD
+=======
+	OPT="add\ncommit\npull\nstatus\nclone\nexit"
+>>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
 
+<<<<<<< HEAD
 restore_process() {
 	echo 
 }
 
 OPT="add\nrestore\ncommit\npull\npush\nstatus\nclone\nexit"
+=======
+OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
+>>>>>>> master
 
 CM=$(echo -e $OPT | dmenu -i -p "git ")
 

@@ -1,11 +1,12 @@
 # dmenuXgit
 ## Features
 
-- Manage your Git projects from anywhere on your desktop
-- No command memorizing required 
+- Manage your Git projects from anywhere on your system
+- No Git commands memorizing required 
 - Easy accessible for new Git users
 - Accelerates simple Git workflows due to the simplicity of dmenu
 - No bloated GUI
+- No mouse input needed
 
 
 ## Installation
@@ -30,11 +31,12 @@ sudo dnf -y update
 sudo dnf -y install dmenu
 ```
 
-Next, you can setup the files as followed:
+Last but not least, install dmenuXgit:
 ```sh
 cd dmenuXgit
 ./setup.sh
 ```
+
 Note that there will be a dmenuXgit directory created in your user's root folder.
 
 ## Contribution
