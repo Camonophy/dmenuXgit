@@ -47,35 +47,48 @@ add_process() {
 	then
 		echo "Nothing to commit"
 	else
-		git status > /home/"$USER"/dmenuXgit/untracked_files.txt
+		git status > /home/$USER/untracked_files.txt
 		
 		# Line numbers to mark ranges in the ouput
-		LINE_NUM=$(wc -l /home/"$USER"/dmenuXgit/untracked_files.txt | cut -d ' ' -f 1)
+		LINE_NUM=$(wc -l /home/$USER/untracked_files.txt | cut -d ' ' -f 1)
 
-		MODIFIED_BEGIN=$(echo $(cat /home/"$USER"/dmenuXgit/untracked_files.txt \
+		MODIFIED_BEGIN=$( echo $(cat /home/$USER/untracked_files.txt \
 			       | grep -n 'Changes not staged for commit:' \
 			       | cut -d ':' -f 1) + 3 \
 			       | bc )
-		MODIFIED_END=$(echo $(cat /home/"$USER"/dmenuXgit/untracked_files.txt \
-		       	     | grep -n 'Untracked files:' \
-			     | cut -d ':' -f 1) \
-			     | bc )
+
+		MODIFIED_END=$( echo $(cat /home/$USER/untracked_files.txt \
+		       	   | grep -n 'Untracked files:' \
+			       | cut -d ':' -f 1) \
+			       | bc )
 		
-		NEW_FILE_BEGIN=$(echo $MODIFIED_END + 2 | bc )
-		NEW_FILE_END=$(echo $LINE_NUM - 2 | bc)
-		
+		if [[ "$MODIFIED_END" == "" ]]
+		then
+			NEW_FILE_BEGIN=$(echo $LINE_NUM - 1 | bc)
+			MODIFIED_END=$(echo $LINE_NUM - 1 | bc)
+		else
+			NEW_FILE_BEGIN=$(echo $MODIFIED_END + 2 | bc )
+		fi
+
+		if [[ "$MODIFIED_BEGIN" == "" ]]
+		then
+			MODIFIED_BEGIN=$MODIFIED_END
+		fi
+
+		NEW_FILE_END=$(echo $LINE_NUM - 1 | bc)
+
 		# Get the actual files from the output
-		MODIFIED_LIST=$(head -$MODIFIED_END /home/"$USER"/dmenuXgit/untracked_files.txt \
+		MODIFIED_LIST=$(head -$MODIFIED_END /home/$USER/untracked_files.txt \
 			      | tail +$MODIFIED_BEGIN \
 			      | sed 's/ //g' \
 			      | cut -d ':' -f 2 )
-		
+
 		NEW_FILE_LIST=$(git status | head -$NEW_FILE_END \
 			      | tail +$NEW_FILE_BEGIN \
 			      | tr -d '\011' \
 			      | cut -d ':' -f 2 )
 
-		rm untracked_files.txt
+		rm /home/$USER/untracked_files.txt
 	
 		# User input
 		if [[ "$MODIFIED_LIST" == "" && "$NEW_FILE_LIST" == "" ]]
@@ -174,11 +187,6 @@ restore_process() {
 	then
 		echo "Nothing to commit"
 	else
-		git status > /home/"$USER"/dmenuXgit/untracked_files.txt
-		
-		# Line numbers to mark ranges in the ouput
-		LINE_NUM=$(wc -l /home/"$USER"/dmenuXgit/untracked_files.txt | cut -d ' ' -f 1)
-
 		ADDED_FILES=$(git status | awk '/modified:/ {print $2}' && git status | awk '/file:/ {print $3}')
 	
 		# User input

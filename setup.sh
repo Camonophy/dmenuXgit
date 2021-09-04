@@ -8,20 +8,28 @@ fi
 echo "Create config file at /opt/dmenuXgit/" && echo
 
 GIT_PATH=""
+CONTINUE=""
 CONF_PATH="/opt/dmenuXgit/"
 
-# Read single project path input 
-# TODO: Let the user define an alias for each path given
-#       and implement an extra menu to switch between them
+# Read project paths 
 read -p "Absolute path to your local GitHub project: " GIT_PATH
 
-# Force path input
-# TODO: Make sure that it is a git repo (e.g. check for an .git)
 while [[ "$GIT_PATH" == "" ]]
 do
 
 	echo -e "Error: No GitHub project path defined!\n"
 	read -p "Absolute path to your local GitHub project: " GIT_PATH
+
+done
+
+# Remove slashes at the end
+LC=$(echo $GIT_PATH | tail -c 2)
+
+while [[ "$LC" == "/" ]]
+do
+
+	GIT_PATH=${GIT_PATH::-1}
+	LC=$(echo $GIT_PATH | tail -c 2)
 
 done
 
@@ -53,9 +61,44 @@ else
 	echo  "$GIT_PATH" > "$CONF_PATH"/dmenuXgit.conf
 fi
 
+echo -e "==========================================="
+read -p "Add anothe Git project? [y/n] " CONTINUE
+
+while [ "$CONTINUE" == "y" ]   || 
+	  [ "$CONTINUE" == "yes" ] || 
+	  [ "$CONTINUE" == "Y" ]   || 
+	  [ "$CONTINUE" == "YES" ] || 
+	  [ "$CONTINUE" == "Yes" ] || 
+	  [ "$CONTINUE" == "" ]
+do
+
+	read -p "Absolute path to your local GitHub project: " GIT_PATH
+	LC=$(echo $GIT_PATH | tail -c 2)
+
+	while [[ "$LC" == "/" ]]
+	do
+	
+		GIT_PATH=${GIT_PATH::-1}
+		LC=$(echo $GIT_PATH | tail -c 2)
+	
+	done
+
+	if [[ "$GIT_PATH" == "" ]]
+	then
+		echo 
+	else
+		echo  "$GIT_PATH" >> "$CONF_PATH"/dmenuXgit.conf
+	fi
+
+	echo -e "==========================================="
+	read -p "Add anothe Git project? [y/n] " CONTINUE
+
+done
+
 cp script.sh /opt/dmenuXgit/
 cp dmenuXgit /bin/dmenuXgit
 chmod 755 /opt/dmenuXgit/script.sh
 chmod 755 /bin/dmenuXgit
+chmod 755 "$CONF_PATH"/dmenuXgit.conf
 
 echo "Setup successful!"
