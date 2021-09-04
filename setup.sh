@@ -38,7 +38,12 @@ if [[ -f "$CONF_PATH/dmenuXgit.conf" ]]
 then
 	read -p  "$CONF_PATH/dmenuXgit.conf already exists. Are you sure you want to overwrite it? [y/n] " OVERWRITE
 
-	if [ "$OVERWRITE" == "y" ] || [ "$OVERWRITE" == "yes" ] || [ "$OVERWRITE" == "Y" ] || [ "$OVERWRITE" == "YES" ] || [ "$OVERWRITE" == "Yes" ]
+	if [ "$OVERWRITE" == "y" ]   || 
+	   [ "$OVERWRITE" == "yes" ] || 
+	   [ "$OVERWRITE" == "Y" ]   || 
+	   [ "$OVERWRITE" == "YES" ] || 
+	   [ "$OVERWRITE" == "Yes" ] || 
+	   [ "$OVERWRITE" == "" ]
 	then 
 		touch "$CONF_PATH"/dmenuXgit.conf
 		echo  "$GIT_PATH" > "$CONF_PATH"/dmenuXgit.conf
