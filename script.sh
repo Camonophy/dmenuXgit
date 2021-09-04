@@ -26,15 +26,9 @@ branch() {
 	then
 		clone_process
 	
-<<<<<<< HEAD
 	elif [[ $1 == "restore" ]]
 	then
 		restore_process
-=======
-	#elif [[ $1 == "restore" ]]
-	#then
-	#	restore_process
->>>>>>> master
 
 	#elif [[ $1 == "diff" ]]
 	#then
@@ -105,10 +99,6 @@ add_process() {
 		fi
 	fi
 	
-<<<<<<< HEAD
-=======
-	OPT="add\npull\ncommit\npush\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -118,10 +108,6 @@ commit_process() {
 	MSG=$(echo $MSG | dmenu -i -p "Write commit message:")
 	git commit -m "$MSG"
 	
-<<<<<<< HEAD
-=======
-	OPT="add\ncommit\npush\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -129,10 +115,6 @@ commit_process() {
 pull_process() {
 	git pull
 
-<<<<<<< HEAD
-=======
-	OPT="add\ncommit\npush\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -140,10 +122,6 @@ pull_process() {
 push_process() {
 	git push
 
-<<<<<<< HEAD
-=======
-	OPT="add\ncommit\npull\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -151,10 +129,6 @@ push_process() {
 status_process() {
 	git status
 
-<<<<<<< HEAD
-=======
-	OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
@@ -174,13 +148,8 @@ clone_process() {
 	DIR=""
 	DIR=$(echo $DIR | dmenu -i -p "Destination path ")
 
-<<<<<<< HEAD
 	KEY="HTTPS\nSSH"
 	CH=$(echo -e $KEY | dmenu -i -p "Clone options ")
-=======
-	OPT="HTTPS\nSSH"
-	CH=$(echo -e $OPT | dmenu -i -p "Clone options ")
->>>>>>> master
 	
 	OWNER=""
 	OWNER=$(echo $OWNER | dmenu -i -p "Name of the repository owner ")
@@ -195,23 +164,48 @@ clone_process() {
 		git clone "git@github.com:$OWNER/$REPO.git" $DIR
 	fi
 
-<<<<<<< HEAD
-=======
-	OPT="add\ncommit\npull\nstatus\nclone\nexit"
->>>>>>> master
 	CM=$(echo -e $OPT | dmenu -i -p "git ")
 	branch $CM
 }
 
-<<<<<<< HEAD
 restore_process() {
-	echo 
+	GREP=$(git status | grep 'nothing to commit, working tree clean')
+	if [[ "$GREP" != "" ]]
+	then
+		echo "Nothing to commit"
+	else
+		git status > /home/"$USER"/dmenuXgit/untracked_files.txt
+		
+		# Line numbers to mark ranges in the ouput
+		LINE_NUM=$(wc -l /home/"$USER"/dmenuXgit/untracked_files.txt | cut -d ' ' -f 1)
+
+		ADDED_FILES=$(git status | awk '/modified:/ {print $2}' && git status | awk '/file:/ {print $3}')
+	
+		# User input
+		if [[ "$ADDED_FILES" == "" ]]
+		then
+			FILE=$(echo -e "" | dmenu -i -p "No file to restore!" )
+
+		else
+			FILES="$ADDED_FILES\\nALL"
+			FILE=$(echo -e "$FILES" | dmenu -i -p "git add " )
+	
+			if [[ "$FILE" == "ALL" ]]
+			then
+				git restore $ADDED_FILES
+				git restore --staged $ADDED_FILES
+			else
+				git restore $FILE
+				git restore --staged $FILE
+			fi
+		fi
+	fi
+	
+	CM=$(echo -e $OPT | dmenu -i -p "git ")
+	branch $CM
 }
 
 OPT="add\nrestore\ncommit\npull\npush\nstatus\nclone\nexit"
-=======
-OPT="add\ncommit\npull\npush\nstatus\nclone\nexit"
->>>>>>> master
 
 CM=$(echo -e $OPT | dmenu -i -p "git ")
 
