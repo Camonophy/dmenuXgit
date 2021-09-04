@@ -11,4 +11,8 @@ then
 	exit	
 fi
 
+OP=$(cat /opt/dmenuXgit/dmenuXgit.conf | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
+CM=$(echo -e $OP | dmenu -i -p "Choose repository ")
+GIT_PATH=$(grep $CM /opt/dmenuXgit/dmenuXgit.conf)
+
 terminal -cd "$GIT_PATH" -e /opt/dmenuXgit/script.sh
