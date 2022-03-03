@@ -4,17 +4,14 @@
 
 GIT_PATH=$(cat /opt/dmenuXgit/dmenuxgit.conf)
 
-echo "$GIT_PATH"
-
 if [[ "$GIT_PATH" == "" ]]
 then
 	# Pass directory
 	ERR=$(echo $GIT_PATH | dmenu -i -p "Enter the absolut path to you local git project:")
-	sudo mkdir /opt/dmenuXgit
-	sudo touch /opt/dmenuXgit/dmenuxgit.conf
-	echo $GIT_PATH >> /opt/dmenuXgit/dmenuxgit.conf
+	echo $GIT_PATH >> /usr/share/dmenuxgit.conf
 fi
 
+# -g /path/to/git/project
 while getopts g: flag
 do
 	echo ${OPTARG} >> /opt/dmenuXgit/dmenuxgit.conf
@@ -24,8 +21,6 @@ done
 OP=$(cat /opt/dmenuXgit/dmenuxgit.conf | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
 CM=$(echo -e $OP | dmenu -i -p "Choose repository ")
 GIT_PATH=$(grep $CM /opt/dmenuXgit/dmenuxgit.conf)
-
-terminal -cd "$GIT_PATH" -e /opt/dmenuXgit/script.sh
 
 
 ########################### Script #######################################
