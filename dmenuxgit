@@ -2,25 +2,25 @@
 
 ######################### Prep ########################################
 
-GIT_PATH=$(cat /opt/dmenuXgit/dmenuxgit.conf)
+GIT_PATH=$(cat /usr/share/dmenuxgit/dmenuxgit.conf)
 
 if [[ "$GIT_PATH" == "" ]]
 then
 	# Pass directory
 	ERR=$(echo $GIT_PATH | dmenu -i -p "Enter the absolut path to you local git project:")
-	echo $GIT_PATH >> /usr/share/dmenuxgit.conf
+	echo "$GIT_PATH" >> /usr/share/dmenuxgit/dmenuxgit.conf
 fi
 
-# -g /path/to/git/project
+# -g /path/to/git/project 
 while getopts g: flag
 do
-	echo ${OPTARG} >> /opt/dmenuXgit/dmenuxgit.conf
+	echo ${OPTARG} >> /usr/share/dmenuxgit/dmenuxgit.conf
 done
 
-# Choose one of the Git-Repositories from /opt/dmenuXgit/dmenuXgit.conf
-OP=$(cat /opt/dmenuXgit/dmenuxgit.conf | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
+# Choose one of the Git-Repositories from /usr/share/dmenuxgit/dmenuXgit.conf
+OP=$(cat /usr/share/dmenuxgit/dmenuxgit.conf | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
 CM=$(echo -e $OP | dmenu -i -p "Choose repository ")
-GIT_PATH=$(grep $CM /opt/dmenuXgit/dmenuxgit.conf)
+GIT_PATH=$(grep $CM /usr/share/dmenuxgit/dmenuxgit.conf)
 
 
 ########################### Script #######################################
