@@ -19,7 +19,7 @@ sudo pacman -Syu
 sudo pacman -S dmenu
 ```
 
-Last but not least, install dmenuXgit:
+Now you ready to install dmenuXgit:
 ```sh
 cd dmenuXgit
 ./setup.sh
