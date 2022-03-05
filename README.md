@@ -11,19 +11,7 @@
 
 ## Installation
 
-In order to run you need to install [dmenu](https://github.com/stilvoid/dmenu) from your package manager.
-
-#### Arch
-```sh
-sudo pacman -Syu
-sudo pacman -S dmenu
-```
-
-Now you ready to install dmenuXgit:
-```sh
-cd dmenuXgit
-./setup.sh
-```
+**Comming soon**
 
 Note that there will be a dmenuXgit directory created in your user's root folder.
 
