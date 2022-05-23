@@ -1,0 +1,32 @@
+#!/bin/bash
+
+DXG_GIT_PATH=$(cat /usr/share/dmenuxgit/dmenuxgit.conf)
+
+# Use these lines only on the first run and remove them on release
+# mkdir -p "/usr/share/dmenuxgit"					#
+# touch /usr/share/dmenuxgit/dmenuxgit				#
+# chmod 777 /usr/share/dmenuxgit/dmenuxgit			#
+
+# No Git project specified
+if [[ "$DXG_GIT_PATH" == "" ]]
+then
+	# Pass directory
+	CHS=$(echo "" | dmenu -i -p "Enter the absolut path to you local git project:")
+	echo "$CHS" >> /usr/share/dmenuxgit/dmenuxgit.conf
+fi
+
+# By calling dmenuxgit with a -g option you can add more Git projects:
+# dmenuxgit -g /path/to/git/project 
+while getopts g: flag
+do
+	echo ${OPTARG} >> /usr/share/dmenuxgit/dmenuxgit.conf
+done
+
+# Choose one of the Git-Repositories from /usr/share/dmenuxgit/dmenuXgit.conf
+OP=$(cat /usr/share/dmenuxgit/dmenuxgit.conf | sed -e "s,/\+$,," -e "s,^/\+,," | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
+CM=$(echo -e $OP | dmenu -i -p "Choose repository ")
+
+# TODO: CM result may not be unique for grep
+DXG_GIT_PATH=$(grep $CM /usr/share/dmenuxgit/dmenuxgit.conf)	
+
+terminal -cd "$DXG_GIT_PATH" -e "go run dmenuXgit.go"

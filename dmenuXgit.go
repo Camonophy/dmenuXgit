@@ -94,7 +94,8 @@ func clone_process() {
 }
 
 func commit_process() {
-
+	DXG_MSG := bash("echo \"\" | dmenu -i -p \"Write commit message: \" ")
+	bash("git commit -m \"" + DXG_MSG + "\"")
 }
 
 func diff_process() {
@@ -110,7 +111,7 @@ func push_process() {
 }
 
 func status_process() {
-
+	fmt.Println(bash("git status"))
 }
 
 func restore_process() {
