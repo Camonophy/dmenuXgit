@@ -23,6 +23,7 @@ do
 done
 
 # Choose one of the Git-Repositories from /usr/share/dmenuxgit/dmenuXgit.conf
+# TODO: Remove deleted directories
 OP=$(cat /usr/share/dmenuxgit/dmenuxgit.conf | sed -e "s,/\+$,," -e "s,^/\+,," | rev | cut -d "/" -f1 | rev | awk '{print newl, $1; newl="\\n"}' )
 CM=$(echo -e $OP | dmenu -i -p "Choose repository ")
 
